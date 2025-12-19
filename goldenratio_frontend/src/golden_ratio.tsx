@@ -30,7 +30,7 @@ const Goldenratio = () => {
   const [average, setAverage] = useState<string>('');
   const [outputImage, setOutputImage] = useState<string>('');
   const [filteredMeasurements, setFilteredMeasurements] = useState<Measurement[]>([]);
-  const SERVER_URL = 'http://localhost:8000';
+  const SERVER_URL = 'http://3.110.41.174:8000';
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Goldenratio = () => {
     const url = `${SERVER_URL}/uploadfile/gr_json/${id}/`;
     console.log("GR JSON response: ", url);
 
-    // axios.get(`http://localhost:8000/uploadfile/gr_json/${id}/`)
+    // axios.get(`http://3.110.41.174:8000/uploadfile/gr_json/${id}/`)
     axios.get(url)
       .then((response) => {
         const responseData = response.data;
@@ -68,7 +68,7 @@ const Goldenratio = () => {
   const handleClick = async () => {
     setLoading(true); 
     try {
-      // const response = await axios.get(`http://localhost:8000/uploadfile/gr_pdf/${id}/`, {
+      // const response = await axios.get(`http://3.110.41.174:8000/uploadfile/gr_pdf/${id}/`, {
       const response = await axios.get(`${SERVER_URL}/uploadfile/gr_pdf/${id}/`, {
         responseType: 'blob', 
       });
@@ -94,7 +94,7 @@ const Goldenratio = () => {
       <div className="flex flex-col md:flex-row justify-center mx-auto max-w-md h-md md:space-x-10 shadow-md">
         <img src={uploadedImageURL} alt="Reference 1" className="rounded-md max-w-full h-auto mb-4 md:mb-0" />
         <img 
-          src={outputImage.startsWith('http') ? outputImage : `http://localhost:8000/${outputImage}`} 
+          src={outputImage.startsWith('http') ? outputImage : `http://3.110.41.174:8000/${outputImage}`} 
           alt="Reference 2" 
           className="rounded-md max-w-full h-auto" 
         />

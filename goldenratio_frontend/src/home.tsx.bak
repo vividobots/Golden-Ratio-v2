@@ -1,6 +1,6 @@
 import axios from "axios";
 import { motion } from "framer-motion";
-import { CloudUpload, LogOut, Upload, AlertCircle } from "lucide-react"; // Added AlertCircle
+import { CloudUpload, LogOut, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./components//ui/button";
@@ -17,7 +17,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState(initialValues);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [resolutionError, setResolutionError] = useState<string | null>(null); // New State for Error
   const location = useLocation();
   const { fileId, fileImage } = location.state || {};
   const [user, setUser] = useState<string | null>(null);
@@ -47,59 +46,38 @@ const Home = () => {
       .join("");
   const initials = getInitials(username);
 
-  // --- MODIFIED FILE HANDLER WITH RESOLUTION CHECK ---
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
-    if (!file) return;
+    setValues((prev) => ({ ...prev, file_upload: file }));
 
     const reader = new FileReader();
-    
-    reader.onload = (e: any) => {
-      const img = new Image();
-      img.src = e.target.result;
-
-      img.onload = () => {
-        const width = img.width;
-        const height = img.height;
-
-        // Check Resolution (Min 600x600)
-        if (width < 600 || height < 600) {
-          setResolutionError(`Resolution too low (${width}x${height}px). Minimum 600x600px required.`);
-          // We still set values but keep error active to disable button
-          setValues((prev) => ({ ...prev, file_upload: file }));
-          setImagePreview(e.target.result);
-        } else {
-          // Valid Image
-          setResolutionError(null);
-          setValues((prev) => ({ ...prev, file_upload: file }));
-          setImagePreview(e.target.result);
-        }
-      };
-    };
-
-    reader.readAsDataURL(file);
+    reader.onload = () => setImagePreview(reader.result as string);
+    if (file) reader.readAsDataURL(file);
   };
 
   const uploadFile = async (event: any) => {
     event.preventDefault();
-    if (!imagePreview || resolutionError) return; // Prevent if error exists
+    if (!imagePreview) return;
 
     const formData = new FormData();
     formData.append("user", user || "");
 
-    if (values.file_upload) formData.append("image", values.file_upload);
+    if (values.file_upload) formData.append("image", values.file_upload); // CRITICAL: Use 'image'
 
     setIsDisabled(true);
 
     try {
+      // UPLOAD IMAGE
       const res = await axios.post(
-        "http://localhost:8000/api/process_image/", 
+        "http://3.110.41.174:8000/api/process_image/", // Use the new fixed URL
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       const newFileId = res.data.id;
 
+      // Navigate using the ID
+      // We pass the new ID and the image preview URL for the next screen
       navigate(`/select_method/${newFileId}/True/`, {
         state: {
           uploadedImageURL: imagePreview, 
@@ -159,6 +137,7 @@ const Home = () => {
           by <span className="text-yellow-600">Vividobots</span>
         </p>
         </h1>
+
       </motion.div>
 
       {/* Upload Section */}
@@ -171,26 +150,13 @@ const Home = () => {
             <label
               htmlFor="file-upload"
               className={`w-full h-72 flex flex-col items-center justify-center border-2 border-dashed rounded-xl cursor-pointer transition ${
-                imagePreview 
-                  ? (resolutionError ? "border-red-500 bg-red-50" : "border-indigo-500") 
-                  : "hover:border-indigo-500"
+                imagePreview ? "hidden" : "hover:border-indigo-500"
               }`}
             >
-              {!imagePreview ? (
-                <>
-                  <CloudUpload className="w-12 h-12 text-gray-400" />
-                  <span className="mt-2 text-gray-600 font-medium">
-                    Upload your photo
-                  </span>
-                  <span className="text-xs text-gray-400 mt-1">Min resolution: 600x600 px</span>
-                </>
-              ) : (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-72 object-cover rounded-xl shadow-md"
-                />
-              )}
+              <CloudUpload className="w-12 h-12 text-gray-400" />
+              <span className="mt-2 text-gray-600 font-medium">
+                Upload your photo
+              </span>
             </label>
             <input
               type="file"
@@ -199,19 +165,25 @@ const Home = () => {
               accept=".png, .jpg, .jpeg, .gif"
               onChange={handleFileChange}
             />
-            
-            {/* Warning Message Display */}
-            {resolutionError && (
-              <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded flex items-center gap-2 w-full text-sm font-medium animate-pulse">
-                <AlertCircle className="w-5 h-5" />
-                {resolutionError}
-              </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-72 object-cover rounded-xl shadow-md"
+              />
+            )}
+            {fileImage && !imagePreview && (
+              <img
+                src={fileImage}
+                alt="Preview"
+                className="w-full h-72 object-cover rounded-xl shadow-md"
+              />
             )}
 
             <Button
               type="submit"
-              className={`mt-6 w-full ${resolutionError ? "opacity-50 cursor-not-allowed" : ""}`}
-              disabled={isDisabled || !!resolutionError} 
+              className="mt-6 w-full"
+              disabled={isDisabled}
             >
               {isDisabled ? "Processing..." : "Process"}
             </Button>

@@ -41,7 +41,7 @@ const Reference = () => {
     if (!id) return;
 
     axios
-      .get(`http://localhost:8000/uploadfile/inpt_json/${id}/`)
+      .get(`http://3.110.41.174:8000/uploadfile/inpt_json/${id}/`)
       .then((response) => {
         const responseData = response.data;
         setMeasurements(responseData[0]); // First part: measurement data
@@ -68,7 +68,7 @@ const Reference = () => {
   const handleClick = async () => {
     setLoading(true); 
     try {
-      const response = await axios.get(`http://localhost:8000/uploadfile/inpt_pdf/${id}/`, {
+      const response = await axios.get(`http://3.110.41.174:8000/uploadfile/inpt_pdf/${id}/`, {
         responseType: 'blob', 
       });
 

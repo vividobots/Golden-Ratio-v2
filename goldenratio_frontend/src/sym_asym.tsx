@@ -36,7 +36,7 @@ const Sym_asym = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:8000/uploadfile/sym_json/${id}/`)
+      axios.get(`http://3.110.41.174:8000/uploadfile/sym_json/${id}/`)
         .then((response) => {
           const responseData = response.data;
 
@@ -67,13 +67,13 @@ const Sym_asym = () => {
     // If it already starts with http, return it as is.
     if (path.startsWith('http')) return path;
     // Otherwise, prepend the server URL
-    return `http://localhost:8000/${path.startsWith('/') ? path.slice(1) : path}`;
+    return `http://3.110.41.174:8000/${path.startsWith('/') ? path.slice(1) : path}`;
   };
 
   const handleClick = async () => {
     setLoading(true); 
     try {
-      const response = await axios.get(`http://localhost:8000/uploadfile/sym_pdf/${id}/`, {
+      const response = await axios.get(`http://3.110.41.174:8000/uploadfile/sym_pdf/${id}/`, {
         responseType: 'blob', 
       });
 
