@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key-change-this-in-production")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -51,15 +51,12 @@ INSTALLED_APPS = [
     'overlay',
 ]
 
-
-AUTH_USER_MODEL = 'users.User'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -67,16 +64,11 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'golden_ratio.urls'
-GRAPHENE = {
-    'SCHEMA': 'golden_ratio.schema.schema', # this file doesn't exist yet
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
-}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    
+        'DIRS': [BASE_DIR / 'golden_ratio' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,25 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'golden_ratio.wsgi.application'
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-
-ROOT_URLCONF = 'golden_ratio.urls'
-GRAPHENE = {
-    'SCHEMA': 'golden_ratio.schema.schema', 
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
-}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -124,38 +97,15 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.User'
+
 AUTHENTICATION_BACKENDS = [
-    # 'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
     'graphql_auth.backends.GraphQLAuthBackend'
 ]
 
-CORS_ORIGIN_WHITELIST = (
-  "http://localhost:3000",
-  "http://localhost:8000",
-  "http://192.168.0.116:3001",
-  "http://192.168.68.107:3000",
-  "http://192.168.68.109:3000",
-  "http://192.168.68.110:3000",
-  "http://192.168.68.112:3000",
-  "http://192.168.68.113:3000",
-  "http://192.168.68.114:3000",
-  "http://192.168.68.115:3000",
-  "http://192.168.68.118:3000",
-  "http://192.168.68.120:3000",
-  "http://192.168.68.123:3000",
-  "http://192.168.68.124:3000",
-  "http://192.168.68.126:3000",
-  "http://192.168.68.128:3000",
-  "http://192.168.0.137:3000",
-  "http://15.206.171.90:3000",
-)
-
-
-CORS_ALLOW_ALL_ORIGINS = True
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -171,6 +121,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+GRAPHENE = {
+    'SCHEMA': 'golden_ratio.schema.schema', 
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+GRAPHQL_AUTH = {
+    'LOGIN_ALLOWED_FIELDS': ['email', 'username'],
+    'REGISTER_MUTATION_FIELDS': ['email', 'username'],
+    'UPDATE_MUTATION_FIELDS': ['first_name', 'last_name'],
+
+    # 'EMAIL_TEMPLATES': {
+    #     'password_reset': 'D:/Software_Projects/Git Clone Repository 4/goldenratio_backend/golden_ratio/templates/graphql_auth/password_reset_email.html',
+    # }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -184,23 +150,50 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript, Images) & Media
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'rpraveen272@gmail.com'
-EMAIL_HOST_PASSWORD = 'uahympvgviwnfsur'
+EMAIL_HOST_USER = 'aureus.lens.official@gmail.com'
+EMAIL_HOST_PASSWORD = 'vytxmjuqfnjrtnov'
+DEFAULT_FROM_EMAIL = 'Aureus Lens Support <aureus.lens.official@gmail.com>'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# Define media root for user uploaded files
-MEDIA_URL = '/media/'
+# CORS Configuration
+CORS_ORIGIN_WHITELIST = (
+  "http://localhost:3000",
+  "http://localhost:8000",
+  "http://192.168.0.116:3001",
+  "http://192.168.68.107:3000",
+  "http://192.168.68.109:3000",
+  "http://192.168.68.110:3000",
+  "http://192.168.68.111:3000",
+  "http://192.168.68.112:3000",
+  "http://192.168.68.113:3000",
+  "http://192.168.68.114:3000",
+  "http://192.168.68.115:3000",
+  "http://192.168.68.118:3000",
+  "http://192.168.68.120:3000",
+  "http://192.168.68.123:3000",
+  "http://192.168.68.124:3000",
+  "http://192.168.68.126:3000",
+  "http://192.168.68.128:3000",
+  "http://192.168.0.137:3000",
+  "http://15.206.171.90:3000",
+)
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CORS_ALLOW_ALL_ORIGINS = True
