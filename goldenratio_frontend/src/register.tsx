@@ -53,9 +53,21 @@ const Register = () => {
         if (response.register.success) {
           navigate("/login");
         } else {
-          const errorMsg = response.register.errors 
-            ? (Array.isArray(response.register.errors) ? response.register.errors.join(", ") : response.register.errors)
-            : "Registration failed. Please try again.";
+          let errorMsg = "Registration failed. Please try again.";
+          const errors = response.register.errors;
+
+          if (errors) {
+            if (typeof errors === "string") {
+              errorMsg = errors;
+            } else if (Array.isArray(errors)) {
+              errorMsg = errors.join(", ");
+            } else if (typeof errors === "object") {
+              const errorValues = Object.values(errors).flat();
+              errorMsg = errorValues.join(", ");
+            }
+          }
+            // ? (Array.isArray(response.register.errors) ? response.register.errors.join(", ") : response.register.errors)
+            // : "Registration failed. Please try again.";
           setStatus(errorMsg);
         }
       } catch (error) {
