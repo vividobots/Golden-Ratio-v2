@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // import request, { gql } from "graphql-request";
 // import React, { useState } from "react";
@@ -183,6 +184,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import BASEURL from "./URLs/BaseURL";
+=======
+import request, { gql } from "graphql-request";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import BASEURL from "./URLs/BaseURL";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { motion } from "framer-motion"; // Animation
+import { Mail, Lock, Eye, EyeOff, User, UserPlus, ArrowRight } from "lucide-react"; // Icons
+>>>>>>> fc10dc7df0f58a973343dd1268c2de3f59412b9f
 
 // Yup validation schema
 const registerSchema = Yup.object().shape({
@@ -418,4 +429,8 @@ const Register = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Register;
+=======
+export default Register;
+>>>>>>> fc10dc7df0f58a973343dd1268c2de3f59412b9f

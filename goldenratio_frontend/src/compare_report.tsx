@@ -36,7 +36,7 @@ const getCleanImage = (url: string) => {
         const parts = url.split('http');
         // Reconstruct the last part: 'http' + last element
         let lastPart = 'http' + parts[parts.length - 1];
-        // If it starts with 'http://localhost:8000//', fix the double slash
+        // If it starts with 'http://3.110.41.174:8000//', fix the double slash
         return lastPart.replace('8000//', '8000/'); 
     }
     

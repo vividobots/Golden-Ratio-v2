@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // import React, { useEffect, useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
@@ -173,6 +174,8 @@
 // export default Login;
 
 
+=======
+>>>>>>> fc10dc7df0f58a973343dd1268c2de3f59412b9f
 import { useFormik } from 'formik';
 import { motion } from "framer-motion"; // Animation
 import request, { gql } from 'graphql-request';
@@ -398,4 +401,8 @@ const Login = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Login;
+=======
+export default Login;
+>>>>>>> fc10dc7df0f58a973343dd1268c2de3f59412b9f

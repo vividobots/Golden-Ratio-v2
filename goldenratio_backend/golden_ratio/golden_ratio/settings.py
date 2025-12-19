@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -142,21 +141,17 @@ GRAPHQL_AUTH = {
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images) & Media
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
@@ -172,6 +167,8 @@ EMAIL_HOST_PASSWORD = 'vytxmjuqfnjrtnov'
 DEFAULT_FROM_EMAIL = 'Aureus Lens Support <aureus.lens.official@gmail.com>'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS Configuration
 CORS_ORIGIN_WHITELIST = (
@@ -194,6 +191,9 @@ CORS_ORIGIN_WHITELIST = (
   "http://192.168.68.128:3000",
   "http://192.168.0.137:3000",
   "http://15.206.171.90:3000",
+  "http://3.110.41.174:3000",
 )
 
-CORS_ALLOW_ALL_ORIGINS = True
+# Request Size Limit (Added for Image Uploads)
+# 10 MB = 10 * 1024 * 1024
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760

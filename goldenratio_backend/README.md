@@ -5,8 +5,8 @@
 The first thing to do is to clone the repository:
 
 ```sh
-$ git clone https://github.com/vividobots/goldenratio_backend.git
-$ cd goldenratio_backend
+$ git clone https://github.com/vividobots/Golden-Ratio-v2/goldenratio_backend.git
+$ cd Golden-Ratio-v2/goldenratio_backend
 ```
 
 Create a virtual environment to install dependencies in and activate it:

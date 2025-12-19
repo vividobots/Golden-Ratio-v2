@@ -32,7 +32,7 @@ const Phimatix = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/uploadfile/phi_json/${id}/`)
+    axios.get(`http://3.110.41.174:8000/uploadfile/phi_json/${id}/`)
       .then((response) => {
         const responseData = response.data;
         setMeasurements(responseData[0]); // First part: measurement data
@@ -59,7 +59,7 @@ const Phimatix = () => {
   const handleClick = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/uploadfile/phi_pdf/${id}/`, {
+      const response = await axios.get(`http://3.110.41.174:8000/uploadfile/phi_pdf/${id}/`, {
         responseType: 'blob',
       });
 
@@ -90,7 +90,7 @@ const Phimatix = () => {
           className="rounded-xl max-w-full h-auto mb-4 md:mb-0 shadow-lg"
         />
         <img 
-          src={outputImage.startsWith('http') ? outputImage : `http://localhost:8000/${outputImage}`} 
+          src={outputImage.startsWith('http') ? outputImage : `http://3.110.41.174:8000/${outputImage}`} 
           alt="Reference 2" 
           className="rounded-xl max-w-full h-auto shadow-lg" 
         />

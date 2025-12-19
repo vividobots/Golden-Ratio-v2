@@ -4,7 +4,7 @@
 // Usage:
 // import { normalizeMediaUrl } from './utils/media';
 // <img src={normalizeMediaUrl(dbPathOrAbsoluteUrl)} />
-const URL = "http://localhost:8000/";
+const URL = "http://3.110.41.174:8000/";
 
 export function normalizeMediaUrl(path?: string | null) {
   if (!path) return "";
