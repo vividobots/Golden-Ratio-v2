@@ -57,10 +57,19 @@ const Register = () => {
           const errors = response.register.errors;
 
           if (errors) {
+            // Helper function to extract text from error item
+            const extractText = (err: any) => {
+              if (typeof err === "string") return err;
+              // If it's an object like { message: "Error text" }, return the message
+              if (typeof err === "object" && err !== null && err.message) return err.message;
+              // Fallback
+              return JSON.stringify(err);
+            };
+
             if (typeof errors === "string") {
               errorMsg = errors;
             } else if (Array.isArray(errors)) {
-              errorMsg = errors.join(", ");
+              errorMsg = errors.map(extractText).join(", ");
             } else if (typeof errors === "object") {
               const errorValues = Object.values(errors).flat();
               errorMsg = errorValues.join(", ");
