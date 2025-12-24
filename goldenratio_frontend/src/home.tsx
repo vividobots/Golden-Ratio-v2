@@ -1,6 +1,6 @@
 import axios from "axios";
 import { motion } from "framer-motion";
-import { CloudUpload, LogOut, Upload, AlertCircle } from "lucide-react"; // Added AlertCircle
+import { AlertCircle, CloudUpload, LogOut, Upload } from "lucide-react"; // Added AlertCircle
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./components//ui/button";
@@ -52,6 +52,15 @@ const Home = () => {
     const file = event.target.files[0];
     if (!file) return;
 
+    // 1. Check File Size (Limit: 10MB to match your backend)
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    if (file.size > MAX_SIZE) {
+        setResolutionError(`File is too large (${(file.size / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 10MB.`);
+        setValues((prev) => ({ ...prev, file_upload: null })); // Clear file
+        setImagePreview(null);
+        return;
+    }
+
     const reader = new FileReader();
     
     reader.onload = (e: any) => {
@@ -62,13 +71,23 @@ const Home = () => {
         const width = img.width;
         const height = img.height;
 
-        // Check Resolution (Min 600x600)
-        if (width < 600 || height < 600) {
-          setResolutionError(`Resolution too low (${width}x${height}px). Minimum 600x600px required.`);
-          // We still set values but keep error active to disable button
+        // Define Limits
+        const MIN_DIMENSION = 600;
+        const MAX_DIMENSION = 4096; // Standard 4K limit
+
+        // 2. Check Resolution (Min & Max)
+        if (width < MIN_DIMENSION || height < MIN_DIMENSION) {
+          setResolutionError(`Resolution too low (${width}x${height}px). Minimum ${MIN_DIMENSION}x${MIN_DIMENSION}px required.`);
           setValues((prev) => ({ ...prev, file_upload: file }));
           setImagePreview(e.target.result);
-        } else {
+        } 
+        else if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+           setResolutionError(`Resolution too high (${width}x${height}px). Maximum ${MAX_DIMENSION}x${MAX_DIMENSION}px allowed.`);
+           // Disable upload but show preview so they know what they picked
+           setValues((prev) => ({ ...prev, file_upload: file }));
+           setImagePreview(e.target.result);
+        }
+        else {
           // Valid Image
           setResolutionError(null);
           setValues((prev) => ({ ...prev, file_upload: file }));
