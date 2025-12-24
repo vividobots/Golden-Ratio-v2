@@ -202,8 +202,9 @@ const Home = () => {
                     Upload your photo
                   </span>
                   <span className="text-xs text-gray-400 mt-1">Min resolution: 600x600 px</span>
+                  <span className="text-xs text-gray-400 mt-1">Max resolution: 4096x4096 px</span>
                 </>
-              ) : (
+              ) :    (
                 <img
                   src={imagePreview}
                   alt="Preview"
