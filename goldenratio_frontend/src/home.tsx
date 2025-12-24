@@ -112,7 +112,7 @@ const Home = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/process_image/", 
+        "http://3.110.41.174:8000/api/process_image/", 
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
